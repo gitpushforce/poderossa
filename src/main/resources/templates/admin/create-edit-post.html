@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:method="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>Admin - Poderossa</title>
+    <!-- Favicon icon -->
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      th:href="@{/common/img/logo_poderossa_white.png}"
+    />
+    <!-- Custom CSS -->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="../admin/assets/libs/select2/dist/css/select2.min.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="../admin/assets/libs/jquery-minicolors/jquery.minicolors.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="../admin/assets/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="../admin/assets/libs/quill/dist/quill.snow.css"
+    />
+
+    <link rel="stylesheet" th:href="@{common/css/bootstrap.css}">
+
+    <link href="../admin/css/style.min.css" rel="stylesheet" />
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <!-- ============================================================== -->
+    <!-- Preloader - style you can find in spinners.css -->
+    <!-- ============================================================== -->
+    <div class="preloader">
+      <div class="lds-ripple">
+        <div class="lds-pos"></div>
+        <div class="lds-pos"></div>
+      </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- Main wrapper - style you can find in pages.scss -->
+    <!-- ============================================================== -->
+    <div
+      id="main-wrapper"
+      data-layout="vertical"
+      data-navbarbg="skin5"
+      data-sidebartype="full"
+      data-sidebar-position="absolute"
+      data-header-position="absolute"
+      data-boxed-layout="full"
+    >
+      <!-- ============================================================== -->
+      <!-- Topbar header - style you can find in pages.scss -->
+      <!-- ============================================================== -->
+      <div th:replace="/admin/common/header :: header"></div>
+      <!-- ============================================================== -->
+      <!-- End Topbar header -->
+      <!-- ============================================================== -->
+      <!-- ============================================================== -->
+      <!-- Left Sidebar - style you can find in sidebar.scss  -->
+      <!-- ============================================================== -->
+      <div th:replace="/admin/common/left-side :: left-side"></div>
+      <!-- ============================================================== -->
+      <!-- End Left Sidebar - style you can find in sidebar.scss  -->
+      <!-- ============================================================== -->
+      <!-- ============================================================== -->
+      <!-- Page wrapper  -->
+      <!-- ============================================================== -->
+      <div class="page-wrapper">
+        <!-- ============================================================== -->
+        <!-- Container fluid  -->
+        <!-- ============================================================== -->
+        <div class="container-fluid">
+          <!-- ============================================================== -->
+          <!-- Start Page Content -->
+          <!-- ============================================================== -->
+          <div class="row">
+            <div class="col-md-6">
+              <!-- editor -->
+              <form th:action="@{/guardar}" th:method="post">
+                <input type="hidden" th:name="postId" th:value="${post.postId}">
+                <div class="row">
+                  <div class="col-4 mb-2">
+                    <a class="btn btn-cyan btn-sm text-white" th:href="@{/posts}">Regresar / 戻る</a>
+                  </div>
+
+                  <div class="col-12 mb-2">
+                    <input type="text" th:name="postTitle" class="form-control" placeholder="Title" th:value="${post.title}">
+                  </div>
+
+                  <div class="col-12">
+                    <div class="card">
+                      <div class="card-body">
+                        <h4 class="card-title">Editor</h4>
+                        <!-- Create the editor container -->
+
+                          <div id="editor" style="height: 300px">
+      <!--                      <p>Hello World!</p>-->
+        <!--                    <p>Some initial <strong>bold</strong> text</p>-->
+        <!--                    <p>-->
+        <!--                      <br />-->
+        <!--                    </p>-->
+                          </div>
+                          <input type="hidden" id="datosEditor" th:name="datosEditor">
+                          <div>
+                            <button class="btn btn-info form-control" type="submit" id="save-post-button">GUARDAR / 保存</button>
+                          </div>
+                          <div class="mt-2">
+                            <span class="text-danger" th:if="${savedTime ne null}" th:text="${savedTime}|"></span>
+                          </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+          <!-- ============================================================== -->
+          <!-- End PAge Content -->
+          <!-- ============================================================== -->
+          <!-- ============================================================== -->
+          <!-- Right sidebar -->
+          <!-- ============================================================== -->
+          <!-- .right-sidebar -->
+          <!-- ============================================================== -->
+          <!-- End Right sidebar -->
+          <!-- ============================================================== -->
+        </div>
+
+            <div class="col-md-6">
+              <div class="input-group mb-3">
+                <div class="custom-file">
+                  <input type="file" class="custom-file-input" id="inputGroupFile02">
+                  <label class="custom-file-label" for="inputGroupFile02" aria-describedby="inputGroupFileAddon02">Choose file</label>
+                </div>
+                <div class="input-group-append">
+                  <span class="input-group-text" id="inputGroupFileAddon02">Upload</span>
+                </div>
+              </div>
+
+              <div style="background:red;">
+                <img th:src="@{/user/images/carousel1.jpg}" style="width: 100%;">
+              </div>
+            </div>
+
+          </div>
+            <!-- ============================================================== -->
+        <!-- End Container fluid  -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- footer -->
+        <!-- ============================================================== -->
+        </div>
+        <footer class="footer text-center">
+          All Rights Reserved by Poderossa.
+        </footer>
+        <!-- ============================================================== -->
+        <!-- End footer -->
+        <!-- ============================================================== -->
+      </div>
+      <!-- ============================================================== -->
+      <!-- End Page wrapper  -->
+      <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Wrapper -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- All Jquery -->
+    <!-- ============================================================== -->
+    <script src="../admin/assets/libs/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap tether Core JavaScript -->
+    <script src="../admin/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- slimscrollbar scrollbar JavaScript -->
+    <script src="../admin/assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js"></script>
+    <script src="../admin/assets/extra-libs/sparkline/sparkline.js"></script>
+    <!--Wave Effects -->
+    <script src="../admin/js/waves.js"></script>
+    <!--Menu sidebar -->
+    <script src="../admin/js/sidebarmenu.js"></script>
+    <!--Custom JavaScript -->
+    <script src="../admin/js/custom.min.js"></script>
+    <!-- This Page JS -->
+    <script src="../admin/assets/libs/inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
+    <script src="../admin/js/pages/mask/mask.init.js"></script>
+    <script src="../admin/assets/libs/select2/dist/js/select2.full.min.js"></script>
+    <script src="../admin/assets/libs/select2/dist/js/select2.min.js"></script>
+    <script src="../admin/assets/libs/jquery-asColor/dist/jquery-asColor.min.js"></script>
+    <script src="../admin/assets/libs/jquery-asGradient/dist/jquery-asGradient.js"></script>
+    <script src="../admin/assets/libs/jquery-asColorPicker/dist/jquery-asColorPicker.min.js"></script>
+    <script src="../admin/assets/libs/jquery-minicolors/jquery.minicolors.min.js"></script>
+    <script src="../admin/assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+    <script src="../admin/assets/libs/quill/dist/quill.min.js"></script>
+    <script th:inline="javascript">
+    /*<![CDATA[*/
+      //***********************************//
+      // For select 2
+      //***********************************//
+      $(".select2").select2();
+
+      /*colorpicker*/
+      $(".demo").each(function () {
+        //
+        // Dear reader, it's actually very easy to initialize MiniColors. For example:
+        //
+        //  $(selector).minicolors();
+        //
+        // The way I've done it below is just for the demo, so don't get confused
+        // by it. Also, data- attributes aren't supported at this time...they're
+        // only used for this demo.
+        //
+        $(this).minicolors({
+          control: $(this).attr("data-control") || "hue",
+          position: $(this).attr("data-position") || "bottom left",
+
+          change: function (value, opacity) {
+            if (!value) return;
+            if (opacity) value += ", " + opacity;
+            if (typeof console === "object") {
+              console.log(value);
+            }
+          },
+          theme: "bootstrap",
+        });
+      });
+      /*datwpicker*/
+      jQuery(".mydatepicker").datepicker();
+      jQuery("#datepicker-autoclose").datepicker({
+        autoclose: true,
+        todayHighlight: true,
+      });
+
+      var toolbarOptions = [
+       [{ 'size': ['small', false, 'large'] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ 'color': [] }, { 'background': [] }],
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      ['blockquote', 'code-block'],
+      [{ 'align': [] }]
+       ];
+      var quill = new Quill("#editor", {
+        theme: "snow",
+        modules: {
+          toolbar: toolbarOptions
+        }
+      });
+
+      // remove all content con ".ql-editor"'s div
+      var e = document.querySelector(".ql-editor");
+      var child = e.lastElementChild;
+      while (child) {
+        e.removeChild(child);
+        child = e.lastElementChild;
+      }
+
+      // add content taken from controller to .ql-editor
+      var postBody = /*[[${post.content}]]*/ '';
+      $( ".ql-editor" ).append(postBody);
+      $( "#save-post-button" ).click(function() {
+        var datosEditorinput = document.getElementById("datosEditor");
+        datosEditorinput.setAttribute("value", document.getElementById("editor").innerHTML)
+      });
+      /*]]>*/
+    </script>
+  </body>
+</html>
