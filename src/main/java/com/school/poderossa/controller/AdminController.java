@@ -1,13 +1,22 @@
 package com.school.poderossa.controller;
 
+import com.school.poderossa.api.DriveQuickstart;
 import com.school.poderossa.bean.PostBean;
 import com.school.poderossa.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.security.GeneralSecurityException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -54,17 +63,34 @@ public class AdminController {
 
     @RequestMapping(method=RequestMethod.POST, value="/guardar")
     public String guardar(Model model, RedirectAttributes redirectAttributes, @RequestParam("datosEditor") String bodyContent, @RequestParam("postTitle") String postTitle,
-                          @RequestParam("postId") String postId) {
+                          @RequestParam("postId") String postId, @RequestParam("photo") MultipartFile photo, @RequestParam("oldPhoto") String oldPhoto) throws GeneralSecurityException, IOException {
         String[] html = bodyContent.split("</div>");
         String content = html[0];
         content = content.replace("<div class=\"ql-editor\" data-gramm=\"false\" contenteditable=\"true\">", "");
-        // TODO
-        String postPhoto = "";
+
+        String postPhoto="";
+        if (photo.isEmpty()) {
+            postPhoto = oldPhoto;
+        } else {
+            // converting Multipart to File (need to save it in resources directory)
+            File file = new File("src/main/resources/" + photo.getOriginalFilename());
+            try (OutputStream os = new FileOutputStream(file)) {
+                os.write(photo.getBytes());
+            }
+            // upload the file to google drive and get the Id
+            postPhoto = DriveQuickstart.getGoogleDriveUploadedFileId(file, "posts");
+            // delete file in resources when its uploaded in google drive already
+            if (!postPhoto.isEmpty()) {
+                file.delete();
+            }
+            // TODO escribir codigo para borrar foto que ya no se usa en google drive
+        }
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         String updateTimeStamp = now.format(formatter);
 
+        // update
         if (Objects.equals(service.updatePost(postId, postTitle, content, postPhoto, updateTimeStamp), 1)) {
             PostBean post = service.getPost(postId);
             redirectAttributes.addFlashAttribute("post", post);
