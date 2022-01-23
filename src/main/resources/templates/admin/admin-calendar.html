@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:method="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>Admin - Poderossa</title>
+    <!-- Favicon icon -->
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      th:href="@{/common/img/logo_poderossa_white.png}"
+    />
+    <!-- Custom CSS -->
+<!--    <link-->
+<!--      th:href="@{/admin/assets/libs/fullcalendar/dist/fullcalendar.min.css}"-->
+<!--      rel="stylesheet"-->
+<!--    />-->
+<!--    <link th:href="@{/admin/assets/extra-libs/calendar/calendar.css}" rel="stylesheet" />-->
+    <link th:href="@{/admin/css/style.min.css}" rel="stylesheet" />
+<!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.css" integrity="sha512-bYPO5jmStZ9WI2602V2zaivdAnbAhtfzmxnEGh9RwtlI00I9s8ulGe4oBa5XxiC6tCITJH/QG70jswBhbLkxPw==" crossorigin="anonymous" />-->
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <!-- ============================================================== -->
+    <!-- Preloader - style you can find in spinners.css -->
+    <!-- ============================================================== -->
+    <div class="preloader">
+      <div class="lds-ripple">
+        <div class="lds-pos"></div>
+        <div class="lds-pos"></div>
+      </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- Main wrapper - style you can find in pages.scss -->
+    <!-- ============================================================== -->
+    <div
+      id="main-wrapper"
+      data-layout="vertical"
+      data-navbarbg="skin5"
+      data-sidebartype="full"
+      data-sidebar-position="absolute"
+      data-header-position="absolute"
+      data-boxed-layout="full"
+    >
+      <!-- ============================================================== -->
+      <!-- Topbar header - style you can find in pages.scss -->
+      <!-- ============================================================== -->
+      <div th:replace="/admin/common/header :: header"></div>
+      <!-- ============================================================== -->
+      <!-- End Topbar header -->
+      <!-- ============================================================== -->
+      <!-- ============================================================== -->
+      <!-- Left Sidebar - style you can find in sidebar.scss  -->
+      <!-- ============================================================== -->
+      <div th:replace="/admin/common/left-side :: left-side"></div>
+      <!-- ============================================================== -->
+      <!-- End Left Sidebar - style you can find in sidebar.scss  -->
+      <!-- ============================================================== -->
+      <!-- ============================================================== -->
+      <!-- Page wrapper  -->
+      <!-- ============================================================== -->
+      <div class="page-wrapper">
+        <!-- ============================================================== -->
+        <!-- Container fluid  -->
+        <!-- ============================================================== -->
+        <div class="container-fluid">
+          <div class="row">
+          <div class="col-md-6">
+            <div class="row">
+
+              <form th:action="@{/admin/set-schedule}" method="post">
+                <div class="card p-2">
+                  <div class="row mb-3">
+                    <div class="col-md-12">
+                      <input class="form-control border border-info" th:name="evento" type="text" placeholder="evento / イベント" required>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <div class="col-md-12">
+                      <input class="form-control border border-info" th:name="lugar" type="text" placeholder="lugar / 場所" required>
+                    </div>
+                  </div>
+
+                  <div class="row mb-4">
+                    <div class="col-6 col-md-6 col-sm-6">
+                      <input class="form-control border border-dark readonly" th:name="fecha" id="datepicker"  type="text" placeholder="fecha / 日付" required>
+                    </div>
+                    <div class="col-6 col-md-6 col-sm-6">
+                      <input class="form-control border border-dark readonly" th:name="hora" id="timepicker" type="text" placeholder="hora / 時間" required>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-6 col-md-6 col-sm-6">
+                    </div>
+                    <div class="col-6 col-md-6 col-sm-6">
+                      <button type="submit" class="btn btn-success border-dark form-control">Agregar / 追加</button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="list-group" id="calendar-list">
+
+<!--              <form th:action="@{/admin/set-schedule}" method="post">-->
+                <div th:each="schedule : ${scheduleList}" class="list-group-item list-group-item-action flex-column align-items-start">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1" th:text="${schedule.eventName}"></h5>
+                    <a class="btn btn-danger delete-row" th:href="@{/admin/delete-schedule/{id}(id=${schedule.eventId})}">remove</a>
+                  </div>
+                  <h5 class="mb-1 text-info" th:text="${schedule.eventPlace}"></h5>
+                  <h5 class="text-primary" th:text="|${schedule.eventDate}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${schedule.eventTime}|"></h5>
+                </div>
+<!--              </form>-->
+
+
+
+<!--              <div class="list-group-item list-group-item-action flex-column align-items-start"> -->
+<!--                <div class="d-flex w-100 justify-content-between">-->
+<!--                  <h5 class="mb-1">List group item heading</h5>-->
+<!--&lt;!&ndash;                  <small class="text-muted">3 days ago</small>&ndash;&gt;-->
+<!--                  <button class="btn btn-danger">remove</button>-->
+<!--                </div>-->
+<!--                <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>-->
+<!--                <small class="text-muted">Donec id elit non mi porta.</small>-->
+<!--              </div>-->
+<!--              <div class="list-group-item list-group-item-action flex-column align-items-start">-->
+<!--                <div class="d-flex w-100 justify-content-between">-->
+<!--                  <h5 class="mb-1">List group item heading</h5>-->
+<!--                  <small class="text-muted">3 days ago</small>-->
+<!--                </div>-->
+<!--                <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>-->
+<!--                <small class="text-muted">Donec id elit non mi porta.</small>-->
+<!--              </div>-->
+            </div>
+          </div>
+
+          </div>
+        </div>
+
+
+        <!-- ============================================================== -->
+        <!-- End Container fluid  -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- footer -->
+        <!-- ============================================================== -->
+        <footer class="footer text-center">
+          All Rights Reserved by Poderossa.
+        </footer>
+        <!-- ============================================================== -->
+        <!-- End footer -->
+        <!-- ============================================================== -->
+      </div>
+      <!-- ============================================================== -->
+      <!-- End Page wrapper  -->
+      <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Wrapper -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- All Jquery -->
+    <!-- ============================================================== -->
+    <script th:src="@{/admin/assets/libs/jquery/dist/jquery.min.js}"></script>
+<!--    <script th:src="@{/admin/js/jquery.ui.touch-punch-improved.js}"></script>-->
+    <script th:src="@{/admin/js/jquery-ui.min.js}"></script>
+    <link rel="stylesheet" type="text/css" media="all"
+          href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/smoothness/jquery-ui.css"/>
+<!--    &lt;!&ndash; Bootstrap tether Core JavaScript &ndash;&gt;-->
+<!--    <script th:src="@{/admin/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>-->
+<!--    &lt;!&ndash; slimscrollbar scrollbar JavaScript &ndash;&gt;-->
+    <script th:src="@{/admin/assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js}"></script>
+<!--    <script th:src="@{/admin/assets/extra-libs/sparkline/sparkline.js}"></script>-->
+<!--    &lt;!&ndash;Wave Effects &ndash;&gt;-->
+<!--    <script th:src="@{/admin/js/waves.js}"></script>-->
+<!--    &lt;!&ndash;Menu sidebar &ndash;&gt;-->
+<!--    <script th:src="@{/admin/js/sidebarmenu.js}"></script>-->
+<!--    &lt;!&ndash;Custom JavaScript &ndash;&gt;-->
+    <script th:src="@{/admin/js/custom.min.js}"></script>
+<!--    &lt;!&ndash; this page js &ndash;&gt;-->
+<!--    <script th:src="@{/admin/assets/libs/moment/min/moment.min.js}"></script>-->
+<!--    <script th:src="@{/admin/assets/libs/fullcalendar/dist/fullcalendar.min.js}"></script>-->
+<!--    <script th:src="@{/admin/js/pages/calendar/cal-init.js}"></script>-->
+<!--    <script th:src="@{/common/js/bootstrap.min.js}"></script>-->
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha512-AIOTidJAcHBH2G/oZv9viEGXRqDNmfdPVPYOYKGy3fti0xIplnlgMHUGfuNRzC6FkzIo0iIxgFnr9RikFxK+sw==" crossorigin="anonymous"></script>-->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+    <script th:inline="javascript">
+    /*<![CDATA[*/
+    $(function() {
+      $('#datepicker').datepicker({
+          dateFormat: 'yy年m月d日',
+          onSelect: function(datetext) {
+              var d = new Date(); // for now
+              $('#datepicker').val(datetext);
+          }
+      });
+
+<!--      $('#timepicker').timepicker({-->
+<!--        change: function(time) {-->
+<!--            // the input field-->
+<!--            var element = $(this), text;-->
+<!--            // get access to this Timepicker instance-->
+<!--            var timepicker = element.timepicker();-->
+<!--            text = 'Selected time is: ' + timepicker.format(time);-->
+<!--            element.siblings('span.help-line').text(text);-->
+<!--        }-->
+<!--      });-->
+
+        $(document).ready(function(){
+            $('#timepicker').timepicker({ timeFormat: 'hh:mm p' });
+        });
+
+        $(".readonly").on('keydown paste focus', function(e){
+          if(e.keyCode != 9) // ignore tab
+              e.preventDefault();
+        });
+
+    });
+
+    // dialog confirmation
+    $('.delete-row').click(function(){
+        return confirm("Estas seguro de querer borrar? / この行を削除しますか？");
+    })
+
+
+    // agregando fila en el schedule
+<!--    var parent = 0;-->
+<!--    var child = 0;-->
+
+<!--    $('#add-schedule').click(function() {-->
+<!--        var idparent = "level-" + parent;-->
+<!--        var idchild = "level-" + parent + "-" + child;-->
+
+<!--        var evento = $('#evento').val();-->
+<!--        var lugar = $('#lugar').val();-->
+<!--        var fecha = $('#datepicker').val();-->
+<!--        var hora = $('#timepicker').val();-->
+
+<!--        $('<div class="list-group-item list-group-item-action flex-column align-items-start"></div>').attr('id', idparent).appendTo('#calendar-list');-->
+<!--        $('<div class="d-flex w-100 justify-content-between">').attr('id', idchild).appendTo('#' + idparent);-->
+<!--        $('<h5 class="mb-1 text-info"></h5>').append(lugar).appendTo('#' + idparent);-->
+<!--        $('<h5 class="text-primary"></h5>').append(fecha + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + hora).appendTo('#' + idparent);-->
+
+<!--        $('<h5 class="mb-1"></h5>').append(evento).appendTo('#' + idchild);-->
+<!--        $('<button class="btn btn-danger">remove</button>').appendTo('#' + idchild);-->
+
+<!--        parent++;-->
+<!--        child++;-->
+<!--    });-->
+
+    /*]]>*/
+    </script>
+  </body>
+</html>
+<!--<div class="list-group-item list-group-item-action flex-column align-items-start">-->
+<!--  <div class="d-flex w-100 justify-content-between">-->
+
+<!--    <h5 class="mb-1">List group item heading</h5>-->
+<!--    <button class="btn btn-danger">remove</button>-->
+<!--  </div>-->
+<!--  <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>-->
+<!--  <small>Donec id elit non mi porta.</small>-->
+<!--</div>-->

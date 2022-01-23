@@ -31,8 +31,10 @@ CREATE TABLE IF NOT EXISTS MEMBER_TBL (
 
 CREATE TABLE IF NOT EXISTS SCHEDULE_TBL (
     event_id varchar(6) NOT NULL,
-    profe_id varchar(6) NOT NULL,
+    event_place varchar(100) NOT NULL,
     event_name varchar(150) NOT NULL,
+    event_date varchar(11) NOT NULL,
+    event_time varchar(10) NOT NULL,
     event_datetime timestamp NOT NULL,
     PRIMARY KEY (event_id)
 );

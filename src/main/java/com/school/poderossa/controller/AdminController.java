@@ -2,6 +2,7 @@ package com.school.poderossa.controller;
 
 import com.school.poderossa.api.DriveQuickstart;
 import com.school.poderossa.bean.PostBean;
+import com.school.poderossa.bean.ScheduleBean;
 import com.school.poderossa.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,12 +18,15 @@ import java.io.OutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
+import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Controller
+@RequestMapping("/admin")
 public class AdminController {
 
     @Autowired
@@ -48,9 +52,9 @@ public class AdminController {
         String newPostId = service.createNewPost(profeId);
         if (newPostId.isEmpty()) {
             redirectAttributes.addFlashAttribute("createNewPostErrorMsg", "no se pudo crear");
-            return "redirect:/posts";
+            return "redirect:/admin/posts";
         } else {
-            return "redirect:/editpost/" + newPostId;
+            return "redirect:/admin/editpost/" + newPostId;
         }
     }
 
@@ -100,24 +104,65 @@ public class AdminController {
             redirectAttributes.addFlashAttribute("post", post);
             redirectAttributes.addFlashAttribute("savedTime", "Fallo al guardar! / 保存に失敗しました！");
         }
-        return "redirect:/editpage";
+        return "redirect:/admin/editpage";
     }
 
     @RequestMapping(method = RequestMethod.GET, value="/publish/{postId}/{publicar}")
     public String publish(Model model, @PathVariable("postId") String postId, @PathVariable("publicar") Boolean publicar) {
         service.setStatus(postId, publicar);
-        return "redirect:/posts";
+        return "redirect:/admin/posts";
     }
 
     @RequestMapping(method = RequestMethod.GET, value="/pin/{postId}/{ancla}")
     public String pin(Model model, @PathVariable("postId") String postId, @PathVariable("ancla") Boolean pin) {
         service.setPin(postId, pin);
-        return "redirect:/posts";
+        return "redirect:/admin/posts";
     }
 
     @RequestMapping(method = RequestMethod.GET, value="/delete/{postId}")
     public String delete(Model model, @PathVariable("postId") String postId) {
         System.out.println(postId);
-        return "redirect:/posts";
+        return "redirect:/admin/posts";
     }
+
+    @RequestMapping(method = RequestMethod.GET, value="/schedule")
+    public String schedule(Model model) {
+//        System.out.println(postId);
+        List<ScheduleBean> scheduleList = service.getScheduleList();
+//        ScheduleBean schedule = new ScheduleBean();
+//        schedule.setEventId("234234");
+//        schedule.setEventName("eventooooo");
+//        schedule.setEventPlace("en la cancha");
+//        schedule.setEventDate("2024年12月12日");
+//        schedule.setEventTime("12:23 am");
+//
+//        ScheduleBean schedule2 = new ScheduleBean();
+//        schedule2.setEventId("4444");
+//        schedule2.setEventName("ggfgdgf");
+//        schedule2.setEventPlace("en la 4444");
+//        schedule2.setEventDate("2024年11月12日");
+//        schedule2.setEventTime("12:13 am");
+
+
+
+        model.addAttribute("scheduleList", scheduleList);
+        return "admin/admin-calendar";
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value="/set-schedule")
+    public String setSchedule(Model model, @RequestParam("evento") String evento,
+                              @RequestParam("lugar") String lugar, @RequestParam("fecha") String fecha,
+                              @RequestParam("hora") String hora) throws ParseException {
+
+        service.addSchedule(evento, lugar, fecha, hora);
+        return "redirect:/admin/schedule";
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value="/delete-schedule/{id}")
+    public String deleteSchedule(Model model, @PathVariable("id") String eventId) {
+
+        service.deleteSchedule(eventId);
+        return "redirect:/admin/schedule";
+    }
+
 }

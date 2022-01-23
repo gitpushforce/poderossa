@@ -19,22 +19,22 @@
     <link
       rel="stylesheet"
       type="text/css"
-      href="../admin/assets/libs/select2/dist/css/select2.min.css"
+      th:href="@{/admin/assets/libs/select2/dist/css/select2.min.css}"
     />
     <link
       rel="stylesheet"
       type="text/css"
-      href="../admin/assets/libs/jquery-minicolors/jquery.minicolors.css"
+      th:href="@{/admin/assets/libs/jquery-minicolors/jquery.minicolors.css}"
     />
     <link
       rel="stylesheet"
       type="text/css"
-      href="../admin/assets/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css"
+      th:href="@{/admin/assets/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css}"
     />
     <link
       rel="stylesheet"
       type="text/css"
-      href="../admin/assets/libs/quill/dist/quill.snow.css"
+      th:href="@{/admin/assets/libs/quill/dist/quill.snow.css}"
     />
 
     <link rel="stylesheet" th:href="@{/common/css/bootstrap.css}">
@@ -95,7 +95,7 @@
           <!-- ============================================================== -->
           <!-- Start Page Content -->
           <!-- ============================================================== -->
-          <form th:action="@{/guardar}" th:method="post" enctype="multipart/form-data">
+          <form th:action="@{/admin/guardar}" th:method="post" enctype="multipart/form-data">
             <div class="row">
               <div class="col-md-6">
               <!-- editor -->
@@ -103,7 +103,7 @@
                 <input type="hidden" th:name="postId" th:value="${post.postId}">
                 <div class="row">
                   <div class="col-4 mb-2">
-                    <a class="btn btn-cyan btn-sm text-white" th:href="@{/posts}">Regresar / 戻る</a>
+                    <a class="btn btn-cyan btn-sm text-white" th:href="@{/admin/posts}">Regresar / 戻る</a>
                   </div>
 
                   <div class="col-12 mb-2">
@@ -170,6 +170,8 @@
         <!-- footer -->
         <!-- ============================================================== -->
         </div>
+
+
         <footer class="footer text-center">
           All Rights Reserved by Poderossa.
         </footer>
@@ -187,30 +189,30 @@
     <!-- ============================================================== -->
     <!-- All Jquery -->
     <!-- ============================================================== -->
-    <script src="../admin/assets/libs/jquery/dist/jquery.min.js"></script>
+    <script th:src="@{/admin/assets/libs/jquery/dist/jquery.min.js}"></script>
     <!-- Bootstrap tether Core JavaScript -->
-    <script src="../admin/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/admin/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
     <!-- slimscrollbar scrollbar JavaScript -->
-    <script src="../admin/assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js"></script>
-    <script src="../admin/assets/extra-libs/sparkline/sparkline.js"></script>
+    <script th:src="@{/admin/assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js}"></script>
+    <script th:src="@{/admin/assets/extra-libs/sparkline/sparkline.js}"></script>
     <!--Wave Effects -->
-    <script src="../admin/js/waves.js"></script>
+    <script th:src="@{/admin/js/waves.js}"></script>
     <!--Menu sidebar -->
-    <script src="../admin/js/sidebarmenu.js"></script>
+    <script th:src="@{/admin/js/sidebarmenu.js}"></script>
     <!--Custom JavaScript -->
-    <script src="../admin/js/custom.min.js"></script>
+    <script th:src="@{/admin/js/custom.min.js}"></script>
     <!-- This Page JS -->
-    <script src="../admin/assets/libs/inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
-    <script src="../admin/js/pages/mask/mask.init.js"></script>
-    <script src="../admin/assets/libs/select2/dist/js/select2.full.min.js"></script>
-    <script src="../admin/assets/libs/select2/dist/js/select2.min.js"></script>
-    <script src="../admin/assets/libs/jquery-asColor/dist/jquery-asColor.min.js"></script>
-    <script src="../admin/assets/libs/jquery-asGradient/dist/jquery-asGradient.js"></script>
-    <script src="../admin/assets/libs/jquery-asColorPicker/dist/jquery-asColorPicker.min.js"></script>
-    <script src="../admin/assets/libs/jquery-minicolors/jquery.minicolors.min.js"></script>
-    <script src="../admin/assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
-    <script src="../admin/assets/libs/quill/dist/quill.min.js"></script>
-    <script src="../common/js/bootstrap.min.js"></script>
+    <script th:src="@{/admin/assets/libs/inputmask/dist/min/jquery.inputmask.bundle.min.js}"></script>
+    <script th:src="@{/admin/js/pages/mask/mask.init.js}"></script>
+    <script th:src="@{/admin/assets/libs/select2/dist/js/select2.full.min.js}"></script>
+    <script th:src="@{/admin/assets/libs/select2/dist/js/select2.min.js}"></script>
+    <script th:src="@{/admin/assets/libs/jquery-asColor/dist/jquery-asColor.min.js}"></script>
+    <script th:src="@{/admin/assets/libs/jquery-asGradient/dist/jquery-asGradient.js}"></script>
+    <script th:src="@{/admin/assets/libs/jquery-asColorPicker/dist/jquery-asColorPicker.min.js}"></script>
+    <script th:src="@{/admin/assets/libs/jquery-minicolors/jquery.minicolors.min.js}"></script>
+    <script th:src="@{/admin/assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js}"></script>
+    <script th:src="@{/admin/assets/libs/quill/dist/quill.min.js}"></script>
+    <script th:src="@{/common/js/bootstrap.min.js}"></script>
     <script th:inline="javascript">
     /*<![CDATA[*/
       //***********************************//
@@ -292,7 +294,7 @@
           reader.readAsDataURL(input.files[0]);
         }
       }
-      /*]]>*/
+   　/*]]>*/
     </script>
   </body>
 </html>

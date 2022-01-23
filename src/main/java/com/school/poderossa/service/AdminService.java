@@ -1,12 +1,16 @@
 package com.school.poderossa.service;
 
 import com.school.poderossa.bean.PostBean;
+import com.school.poderossa.bean.ScheduleBean;
 import com.school.poderossa.common.SQLCommon;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -72,7 +76,7 @@ public class AdminService {
         Optional<Map<String, Object>> check = null;
         String randomString;
         do {
-            randomString = getRandomAlphanumericString();
+            randomString = getRandomAlphanumericString(8);
             Map<String, Object> params = new HashMap<>();
             params.put("post_id", randomString);
             check = Optional.ofNullable(sqlCommon.getObjectSQL("admin_search_post_by_post_id", params));
@@ -99,10 +103,10 @@ public class AdminService {
         return sqlCommon.insertOrUpdateRow("admin_update_post", params);
     }
 
-    public String getRandomAlphanumericString() {
+    public String getRandomAlphanumericString(int lenght) {
         int leftLimit = 48; // numeral '0'
         int rightLimit = 122; // letter 'z'
-        int targetStringLength = 8;
+        int targetStringLength = lenght;
         Random random = new Random();
 
         String generatedString = random.ints(leftLimit, rightLimit + 1)
@@ -126,6 +130,58 @@ public class AdminService {
         params.put("status", status);
         params.put("post_id", postId);
         return sqlCommon.insertOrUpdateRow("admin_update_publish", params);
+    }
+
+    public int addSchedule(String evento, String lugar, String fecha, String hora) throws ParseException {
+        Optional<Map<String, Object>> check = null;
+        String randomString;
+        do {
+            randomString = getRandomAlphanumericString(6);
+            Map<String, Object> params = new HashMap<>();
+            params.put("event_id", randomString);
+            check = Optional.ofNullable(sqlCommon.getObjectSQL("admin_search_event_by_event_id", params));
+        } while (check.isPresent());
+
+        String fechaHyphen = fecha.replace("年", "-")
+                .replace("月", "-")
+                .replace("日", "");
+        String[] fechaHyphenSplit = fechaHyphen.split("-");
+
+        // time format
+        SimpleDateFormat displayFormat = new SimpleDateFormat("HH:mm");
+        SimpleDateFormat parseFormat = new SimpleDateFormat("hh:mm a");
+        Date date = parseFormat.parse(hora);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M-d HH:mm");
+        LocalDateTime dateTime = LocalDateTime.parse(fechaHyphen + " " + displayFormat.format(date), formatter);
+
+        Map<String, Object> params =  new HashMap<>();
+        params.put("event_id", randomString);
+        params.put("event_name", evento);
+        params.put("event_place", lugar);
+        params.put("event_date", fecha);
+        params.put("event_time", hora);
+        params.put("event_datetime", dateTime);
+        return sqlCommon.insertOrUpdateRow("admin_insert_schedule", params);
+    }
+
+    public List<ScheduleBean> getScheduleList() {
+        Optional<List<Map<String, Object>>> list = Optional.ofNullable(sqlCommon.getListSQL("admin_schedule_list", new HashMap<>()));
+        return list.map(maps -> maps.stream().filter(Objects::nonNull).map(y -> {
+            ScheduleBean schedule = new ScheduleBean();
+            schedule.setEventId((String) y.get("event_id"));
+            schedule.setEventName((String) y.get("event_name"));
+            schedule.setEventPlace((String) y.get("event_place"));
+            schedule.setEventDate((String) y.get("event_date"));
+            schedule.setEventTime((String) y.get("event_time"));
+            return schedule;
+        }).collect(Collectors.toList())).orElse(Collections.emptyList());
+    }
+
+    public void deleteSchedule(String eventId) {
+        Map<String, Object> params =  new HashMap<>();
+        params.put("event_id", eventId);
+        sqlCommon.insertOrUpdateRow("admin_delete_schedule_row", params);
     }
 
     private String[] getDate(String updateDate) {
